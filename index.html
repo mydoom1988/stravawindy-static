@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Veikiantis Windy žemėlapis</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Windy žemėlapis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; }
-    #windy { width: 100%; height: 100vh; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #windy {
+      height: 100vh;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
   <div id="windy"></div>
+
+  <!-- Windy script -->
   <script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
-  <script src="main.js" type="module"></script>
+
+  <!-- Tavo kodas -->
+  <script type="module" src="main.js"></script>
 </body>
 </html>
