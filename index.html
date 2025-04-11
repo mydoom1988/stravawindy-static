@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
   <meta charset="UTF-8" />
-  <title>Vėjo krypties rodyklės ant žemėlapio</title>
+  <title>Vėjo rodyklės ant žemėlapio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Įkeliame Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
@@ -12,21 +12,15 @@
       padding: 0;
       height: 100%;
     }
+    /* Žemėlapio konteineris */
     #map {
       height: 100vh;
     }
-    /* Paprasta stilius rodyklėms */
+    /* Stilius vėjo rodyklei */
     .wind-arrow {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      font-size: 24px;
+      font-size: 30px;
       color: blue;
-      opacity: 0.7;
-      user-select: none;
-      pointer-events: none;
+      transform-origin: center center;
     }
   </style>
 </head>
@@ -34,7 +28,7 @@
   <div id="map"></div>
   <!-- Įkeliame Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- Įkeliame mūsų JavaScript kodą -->
+  <!-- Mūsų main.js -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
