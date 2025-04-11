@@ -1,17 +1,20 @@
-
+// Apibrėžiam windyInit funkciją – ją iškvies pats libBoot.js
 window.windyInit = function (options) {
-  window.windyAPI = new window.WindyAPI(options);
+  console.log("✅ Windy API užkrauta");
 
-  window.windyAPI.on("load", () => {
-    console.log("✅ Windy API sėkmingai įkeltas");
-    const map = window.windyAPI.map;
-    map.setView([55.95, 22.25], 8); // Mažeikiai
+  const windyAPI = new window.WindyAPI(options);
+
+  windyAPI.on("load", () => {
+    console.log("🌍 Žemėlapis pilnai įkeltas");
+
+    // Prieiga prie žemėlapio ir Leaflet objektų
+    const map = windyAPI.map;
+    const L = window.L;
+
+    // Pavyzdinis markeris Mažeikiuose
+    const marker = L.marker([55.95, 22.25]).addTo(map);
+    marker.bindPopup("Sveikas, Karoli!").openPopup();
   });
 };
 
-window.windyInit({
-  key: 'pB51Zbb2Lz3JQ3j2lsidiIB6d2wlYny3',
-  lat: 55.95,
-  lon: 22.25,
-  zoom: 8
-});
+// Windy API automatiškai iškvies windyInit(config)
