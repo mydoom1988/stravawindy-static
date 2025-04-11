@@ -66,3 +66,27 @@ function createWindOverlay(windDegree) {
 // Užklausa į WeatherAPI, kad gautume vėjo duomenis
 fetch(`https://api.weatherapi.com/v1/current.json?key=df11f87260d1408c81663054251104&q=${lat},${lon}`)
   .then(res => res.json())
+  .then(weather => {
+    const windDegree = weather.current.wind_degree;
+    const windTxt = weather.current.wind_dir;
+    const windSpeed = weather.current.wind_kph;
+
+    // Iškviečiame funkciją, kuri sukuria rodykles (viso overlay)
+    createWindOverlay(windDegree);
+
+    // Parodome informacinį bloką virš žemėlapio
+    const infoDiv = L.control({ position: 'topright' });
+    infoDiv.onAdd = function() {
+      const div = L.DomUtil.create('div', 'wind-info');
+      div.style.backgroundColor = "rgba(255,255,255,0.9)";
+      div.style.padding = "8px";
+      div.style.fontFamily = "Arial, sans-serif";
+      div.style.fontSize = "14px";
+      div.innerHTML = `<strong>Vėjo informacija:</strong><br>
+                       Kryptis: ${windDegree}° (${windTxt})<br>
+                       Greitis: ${windSpeed} km/h`;
+      return div;
+    };
+    infoDiv.addTo(map);
+  })
+  .catch(err => console.error("Klaida gaunant vėjo duomenis:", err));
