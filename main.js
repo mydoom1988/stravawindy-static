@@ -1,5 +1,5 @@
 // Inicijuojame žemėlapį, centruojame į Mažeikius
-const map = L.map('map').setView([55.95, 22.25], 12);
+const map = L.map('map').setView([56.3114, 22.3357], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
@@ -9,19 +9,18 @@ L.tileLayer('https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=
   opacity: 0.5
 }).addTo(map);
 
-// Demo maršruto koordinates Mažeikių rajone
-const demoRouteCoordinates = [
+// Apsibrėžiame demo maršruto koordinates nuo Mažeikių per Leckavą, Buknaičius ir atgal į Mažeikius
+const routeCoordinates = [
   [56.3114, 22.3357], // Mažeikiai
   [56.3168, 22.3741], // Leckava
   [56.3023, 22.3165], // Buknaičiai
   [56.3114, 22.3357]  // Grįžtama į Mažeikius
 ];
 
-// Nubraižome maršrutą – raudona linija
-const routeLayer = L.polyline(demoRouteCoordinates, { color: 'red', weight: 4 }).addTo(map);
+// Nubraižome maršrutą naudojant raudoną liniją
+const routeLayer = L.polyline(routeCoordinates, { color: 'red', weight: 5 }).addTo(map);
 map.fitBounds(routeLayer.getBounds());
 
-// Pridedame markerį maršruto pradžios taškui
-L.marker(demoRouteCoordinates[0]).addTo(map)
-  .bindPopup("Demo maršruto pradžia")
-  .openPopup();
+// Pridedame markerius maršruto pradžioje ir pabaigoje
+L.marker(routeCoordinates[0]).addTo(map).bindPopup("Pradžia: Mažeikiai");
+L.marker(routeCoordinates[routeCoordinates.length - 1]).addTo(map).bindPopup("Pabaiga: Mažeikiai");
