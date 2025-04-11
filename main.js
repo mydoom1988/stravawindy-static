@@ -6,7 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Vėjo sluoksnis
+// OpenWeather vizualus vėjo sluoksnis
 L.tileLayer('https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=7cf63a209363df3dacda32d3d09a7963', {
   opacity: 0.4
 }).addTo(map);
@@ -47,9 +47,12 @@ select.addEventListener("change", async () => {
     Math.cos((lon2 - lon1) * Math.PI / 180)
   ) * 180 / Math.PI + 360) % 360).toFixed(0);
 
-  const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat1}&lon=${lon1}&appid=7cf63a209363df3dacda32d3d09a7963`);
+  // Užklausa į WeatherAPI
+  const weatherRes = await fetch(`https://api.weatherapi.com/v1/current.json?key=df11f87260d1408c81663054251104&q=${lat1},${lon1}`);
   const weather = await weatherRes.json();
-  const windDir = weather.wind.deg;
+
+  const windDir = weather.current.wind_degree;
+  const windTxt = weather.current.wind_dir;
   const diff = Math.abs(windDir - bearing);
   const effective = diff > 180 ? 360 - diff : diff;
 
@@ -57,5 +60,9 @@ select.addEventListener("change", async () => {
                 : effective > 135 ? "🥵 Priešinis vėjas"
                 : "🌬️ Šoninis vėjas";
 
-  windInfo.textContent = `Vėjo kryptis: ${windDir}°, Maršruto kryptis: ${bearing}° → ${verdict}`;
+  windInfo.innerHTML = `
+    <strong>${verdict}</strong><br>
+    Maršruto kryptis: ${bearing}°<br>
+    Vėjo kryptis: ${windDir}° (${windTxt})
+  `;
 });
