@@ -1,92 +1,38 @@
-// main.js – rodo Leaflet žemėlapį, įdeda vėjo sluoksnį bei generuoja rodykles visam žemėlapiui,
-// kurių kryptis nustatyta pagal WeatherAPI pateiktą vėjo kampą
+// Laukiame, kol puslapis pilnai užsikraus
+document.addEventListener("DOMContentLoaded", () => {
 
-console.log("main.js įkeltas");
+  // Inicijuojame Leaflet žemėlapį, centruojame į Mažeikius
+  const map = L.map('map').setView([55.95, 22.25], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-// Nustatome žemėlapio pradinę lokaciją (Mažeikiai)
-const lat = 55.95;
-const lon = 22.25;
+  // Koordinatės, kurioms imsime vėjo duomenis (čia – Mažeikiai)
+  const lat = 55.95;
+  const lon = 22.25;
 
-// Inicijuojame Leaflet žemėlapį
-const map = L.map('map').setView([lat, lon], 10);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+  // Užklausa į WeatherAPI, kad gautume dabartinį vėjo kampą, kryptį ir greitį  
+  fetch(`https://api.weatherapi.com/v1/current.json?key=df11f87260d1408c81663054251104&q=${lat},${lon}`)
+    .then(res => res.json())
+    .then(weather => {
+      const windDir = weather.current.wind_degree;
+      const windTxt = weather.current.wind_dir;
+      const windSpeed = weather.current.wind_kph;
 
-// Įdedame OpenWeather vėjo sluoksnį
-L.tileLayer('https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=7cf63a209363df3dacda32d3d09a7963', {
-  opacity: 0.4
-}).addTo(map);
+      // Sukuriame rodyklę kaip divIcon; panaudojame emoji "➤"
+      const arrowIcon = L.divIcon({
+        className: '',
+        html: `<div class="wind-arrow" style="transform: rotate(${windDir}deg);">➤</div>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+      });
 
-// Funkcija, kuri sukuria grid overlay su rodyklėmis
-function createWindOverlay(windDegree) {
-  // Paimame žemėlapio konteinerio matmenis
-  const container = map.getContainer();
-  const rect = container.getBoundingClientRect();
-
-  // Sukuriame overlay divą, kuris padengs visą žemėlapį
-  const overlay = document.createElement("div");
-  overlay.style.position = "absolute";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.height = "100%";
-  overlay.style.pointerEvents = "none"; // leidžia pelytės įvykiams pereiti prie žemėlapio
-  container.appendChild(overlay);
-
-  // Nustatome rodyklių skaičių: kas 100px
-  const spacing = 100;
-  const cols = Math.ceil(rect.width / spacing);
-  const rows = Math.ceil(rect.height / spacing);
-
-  // Ištrina ankstesnius overlay, jei tokių yra (papildoma logika gali būti įgyvendinta)
-  overlay.innerHTML = "";
-
-  // Generuojame grid'ą su rodyklėmis
-  for (let col = 0; col < cols; col++) {
-    for (let row = 0; row < rows; row++) {
-      const arrow = document.createElement("div");
-      arrow.className = "wind-arrow";
-      // Naudojame emoji "➤" kaip rodyklę (arba "↑" jei norim, kad rodytų į viršų)
-      arrow.textContent = "➤";
-      // Rodyklės rotacija pagal vėjo kampą
-      // Jei norime, kad rodyklė rodytų iš kur pučia (tai yra vėjo kryptis),
-      // tada jei windDegree yra 250, reiškia vėjas pučia iš 250° – rodyklė turėtų būti pasukta atitinkamai
-      arrow.style.transform = `rotate(${windDegree}deg)`;
-
-      // Apskaičiuojam poziciją (centruojame rodyklę)
-      arrow.style.left = (col * spacing + (spacing - 30) / 2) + "px";
-      arrow.style.top = (row * spacing + (spacing - 30) / 2) + "px";
-
-      overlay.appendChild(arrow);
-    }
-  }
-}
-
-// Užklausa į WeatherAPI, kad gautume vėjo duomenis
-fetch(`https://api.weatherapi.com/v1/current.json?key=df11f87260d1408c81663054251104&q=${lat},${lon}`)
-  .then(res => res.json())
-  .then(weather => {
-    const windDegree = weather.current.wind_degree;
-    const windTxt = weather.current.wind_dir;
-    const windSpeed = weather.current.wind_kph;
-
-    // Iškviečiame funkciją, kuri sukuria rodykles (viso overlay)
-    createWindOverlay(windDegree);
-
-    // Parodome informacinį bloką virš žemėlapio
-    const infoDiv = L.control({ position: 'topright' });
-    infoDiv.onAdd = function() {
-      const div = L.DomUtil.create('div', 'wind-info');
-      div.style.backgroundColor = "rgba(255,255,255,0.9)";
-      div.style.padding = "8px";
-      div.style.fontFamily = "Arial, sans-serif";
-      div.style.fontSize = "14px";
-      div.innerHTML = `<strong>Vėjo informacija:</strong><br>
-                       Kryptis: ${windDegree}° (${windTxt})<br>
-                       Greitis: ${windSpeed} km/h`;
-      return div;
-    };
-    infoDiv.addTo(map);
-  })
-  .catch(err => console.error("Klaida gaunant vėjo duomenis:", err));
+      // Pridedame markerį su rodykle į žemėlapį
+      L.marker([lat, lon], { icon: arrowIcon }).addTo(map)
+        .bindPopup(`Vėjo kryptis: ${windDir}° (${windTxt})<br>Greitis: ${windSpeed} km/h`)
+        .openPopup();
+    })
+    .catch(err => {
+      console.error("Klaida gaunant vėjo duomenis:", err);
+    });
+});
