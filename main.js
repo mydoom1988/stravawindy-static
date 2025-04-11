@@ -21,7 +21,7 @@ fetch(`https://api.weatherapi.com/v1/current.json?key=df11f87260d1408c8166305425
     const arrowIcon = L.divIcon({
       className: '', // nereikia jokių CSS klasių su animacija
       html: `<div style="font-size: 30px; transform: rotate(${windDir}deg);">🧭</div>`,
-      iconSize: [30, 30],
+      iconSize: [60, 60],
       iconAnchor: [15, 15]
     });
     
