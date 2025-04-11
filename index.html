@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="lt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Strava + Leaflet Vėjo Analizė</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Demo Maršrutas su Vėjo Informacija</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Įkeliame Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <style>
@@ -15,30 +15,18 @@
     #map {
       height: 100vh;
     }
-    #controls {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px;
-      border-radius: 4px;
-      font-family: Arial, sans-serif;
+    .wind-arrow {
+      font-size: 20px; /* Dydis rodyklės */
+      transform-origin: center; /* Sukimosi centras */
+      transform-box: fill-box;
     }
   </style>
 </head>
 <body>
-  <!-- Valdikliai su vėjo informacija, maršrutų sąrašu -->
-  <div id="controls">
-    <label for="activitySelect">Pasirink maršrutą:</label>
-    <select id="activitySelect"><option>Demo maršrutas</option></select>
-    <div id="windInfo" style="margin-top: 8px;"></div>
-  </div>
   <div id="map"></div>
-
   <!-- Įkeliame Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- Mūsų JavaScript kodas -->
+  <!-- Mūsų main.js -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
