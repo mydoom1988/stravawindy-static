@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
   <meta charset="UTF-8" />
-  <title>Vėjo rodyklės ant žemėlapio</title>
+  <title>Strava + Leaflet Vėjo Analizė</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Įkeliame Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
@@ -12,23 +12,33 @@
       padding: 0;
       height: 100%;
     }
-    /* Žemėlapio konteineris */
     #map {
       height: 100vh;
     }
-    /* Stilius vėjo rodyklei */
-    .wind-arrow {
-      font-size: 30px;
-      color: blue;
-      transform-origin: center center;
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
     }
   </style>
 </head>
 <body>
+  <!-- Valdikliai su vėjo informacija, maršrutų sąrašu -->
+  <div id="controls">
+    <label for="activitySelect">Pasirink maršrutą:</label>
+    <select id="activitySelect"><option>Demo maršrutas</option></select>
+    <div id="windInfo" style="margin-top: 8px;"></div>
+  </div>
   <div id="map"></div>
+
   <!-- Įkeliame Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- Mūsų main.js -->
+  <!-- Mūsų JavaScript kodas -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
