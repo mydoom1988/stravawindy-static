@@ -11,16 +11,15 @@ L.tileLayer('https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=
 
 // Demo maršruto koordinates Mažeikių rajone
 const demoRouteCoordinates = [
-  [55.95, 22.25],
-  [55.952, 22.253],
-  [55.955, 22.256],
-  [55.958, 22.260],
-  [55.960, 22.265],
-  [55.962, 22.270],
-  [55.965, 22.275],
-  [55.968, 22.280],
-  [55.970, 22.285],
-  [55.973, 22.290]
+    [56.319, 22.335],   # Mažeikiai
+    [56.3062, 22.35],   # Intermediate point 1
+    [56.2935, 22.3667], # Intermediate point 2
+    [56.2900, 22.4167], # Intermediate point 3
+    [56.2865, 22.4667], # Intermediate point 4
+    [56.2935, 22.5167], # Leckava
+    [56.2835, 22.5344], # Intermediate point between Leckava and Buknaičiai
+    [56.2800, 22.5432], # Intermediate point near Buknaičiai
+    [56.2765, 22.5521]  # Buknaičiai
 ];
 
 // Nubraižome maršrutą – raudona linija
